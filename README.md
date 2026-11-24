@@ -16,6 +16,14 @@ npm run build:single   # cała aplikacja w jednym pliku: dist-single/index.html
 
 Gotowy pojedynczy plik: `CappySculptPaint3D.html` — otwórz go w przeglądarce (bez serwera, bez internetu).
 
+## Publikacja na GitHub Pages
+
+Kod w `src/` musi zostać zbudowany przez Vite — przeglądarka nie załaduje go bezpośrednio
+(`import 'three'`, import CSS z JS). Dlatego publikowanie surowego repozytorium daje stronę bez stylów.
+
+Workflow `.github/workflows/deploy.yml` buduje aplikację i publikuje `dist/` przy każdym pushu do `main`.
+Jednorazowo: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+
 ## Struktura projektu / Project structure
 
 ```
