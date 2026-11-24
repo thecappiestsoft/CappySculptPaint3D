@@ -1,0 +1,21 @@
+/* ---------- viewport ---------- */
+.viewport { position: relative; flex: 1; min-width: 0; background: var(--vp); overflow: hidden; }
+#gl { width: 100%; height: 100%; display: block; touch-action: none; outline: none; }
+.vp-badge { position: absolute; top: 10px; left: 10px; padding: 4px 9px; border-radius: 20px; background: color-mix(in srgb, var(--panel) 80%, transparent); border: 1px solid var(--border); font-size: 11.5px; pointer-events: none; backdrop-filter: blur(6px); }
+.vp-hint { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); padding: 5px 12px; border-radius: 20px; background: color-mix(in srgb, var(--panel) 75%, transparent); color: var(--muted); font-size: 11.5px; pointer-events: none; white-space: nowrap; max-width: 95%; overflow: hidden; text-overflow: ellipsis; backdrop-filter: blur(6px); }
+.drop-hint { position: absolute; inset: 12px; border: 2px dashed var(--accent); border-radius: 14px; display: grid; place-items: center; background: color-mix(in srgb, var(--accent) 10%, transparent); font-size: 16px; font-weight: 600; pointer-events: none; }
+.progress { position: absolute; inset: 0; display: grid; place-items: center; background: color-mix(in srgb, var(--bg) 45%, transparent); z-index: 4; }
+.progress-box { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; width: 300px; box-shadow: var(--shadow); }
+.progress-label { margin-bottom: 10px; font-weight: 600; }
+.bar { height: 6px; border-radius: 3px; background: var(--panel-2); overflow: hidden; }
+.bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .1s; }
+
+/* radial menu */
+.radial { position: absolute; width: 0; height: 0; z-index: 6; }
+.radial .ring { position: absolute; left: -130px; top: -130px; width: 260px; height: 260px; border-radius: 50%; background: color-mix(in srgb, var(--panel) 82%, transparent); border: 1px solid var(--border); box-shadow: var(--shadow); backdrop-filter: blur(8px); }
+.radial .item { position: absolute; width: 54px; height: 54px; margin: -27px 0 0 -27px; border-radius: 50%; border: 1px solid var(--border); background: var(--panel-2); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 9.5px; cursor: pointer; color: var(--muted); gap: 1px; }
+.radial .item svg { width: 20px; height: 20px; color: var(--text); }
+.radial .item:hover, .radial .item.hot { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 22%, var(--panel-2)); color: var(--text); }
+.radial .center { position: absolute; left: -62px; top: -62px; width: 124px; height: 124px; border-radius: 50%; background: var(--panel); border: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 10px; font-size: 10.5px; }
+.radial .center input[type="range"] { width: 92px; }
+.radial .center input[type="color"] { width: 40px; height: 22px; border: 0; padding: 0; background: none; }

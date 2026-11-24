@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CappySculptPaint3D</title>
+  <link rel="icon" type="image/svg+xml" href="./src/assets/icon.svg" />
+</head>
+<body>
+  <div id="app" class="mode-simple">
+    <!-- ================= TOP BAR ================= -->
+    <header class="topbar">
+      <div class="brand">
+        <img class="logo" src="./src/assets/icon.svg" alt="" />
+        <span class="brand-name">CappySculptPaint<b>3D</b></span>
+      </div>
+
+      <div class="tb-group">
+        <div class="menu pro-only" id="fileMenu">
+          <button class="btn" data-i18n="file" data-menu-toggle>Plik</button>
+          <div class="menu-list">
+            <button data-action="newProject" data-i18n="newProject">Nowy projekt</button>
+            <button data-action="openTxs" data-i18n="openTxs">Otwórz projekt (.txs)…</button>
+            <button data-action="saveTxs" data-i18n="saveTxs">Zapisz projekt (.txs)</button>
+            <hr />
+            <button data-action="import" data-i18n="importModel">Importuj model…</button>
+            <button data-action="export" data-i18n="exportTextures">Eksportuj tekstury…</button>
+            <hr />
+            <button data-action="unwrap" data-i18n="autoUnwrap">Automatyczne rozłożenie UV</button>
+          </div>
+        </div>
+        <button class="btn icon-text" data-action="import" data-i18n-title="importModelTip">
+          <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v3h16v-3"/></svg>
+          <span data-i18n="import">Import</span>
+        </button>
+        <select id="modelSelect" class="select" data-i18n-title="builtinModels"></select>
+        <button class="btn icon-text" data-action="export" data-i18n-title="exportTip">
+          <svg viewBox="0 0 24 24"><path d="M12 15V3m0 0L8 7m4-4 4 4M4 17v3h16v-3"/></svg>
+          <span data-i18n="export">Eksport</span>
+        </button>
+      </div>
+
+      <div class="tb-group">
+        <button class="btn icon" id="undoBtn" data-action="undo" data-i18n-title="undoTip"><svg viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></button>
+        <button class="btn icon" id="redoBtn" data-action="redo" data-i18n-title="redoTip"><svg viewBox="0 0 24 24"><path d="m15 14 5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/></svg></button>
+      </div>
+
+      <div class="tb-group sym" data-i18n-title="symmetryTip">
+        <span class="tb-label" data-i18n="symmetry">Symetria</span>
+        <button class="btn toggle sym-btn" data-sym="x">X</button>
+        <button class="btn toggle sym-btn" data-sym="y">Y</button>
+        <button class="btn toggle sym-btn" data-sym="z">Z</button>
+      </div>
+
+      <div class="tb-group pro-only">
+        <label class="tb-label" for="resSelect" data-i18n="resolution">Rozdzielczość</label>
+        <select id="resSelect" class="select">
+          <option value="512">512²</option>
+          <option value="1024" selected>1K (1024²)</option>
+          <option value="2048">2K (2048²)</option>
+        </select>
+        <button class="btn" data-action="bake" data-i18n="bakeMaps" data-i18n-title="bakeTip">Wypal mapy</button>
+        <select id="viewSelect" class="select" data-i18n-title="viewModeTip"></select>
+      </div>
+
+      <div class="tb-spacer"></div>
+      <div class="stats pro-only" id="stats">— FPS</div>
+
+      <div class="tb-group right">
+        <div class="seg" id="modeSeg" data-i18n-title="modeTip">
+          <button data-mode="simple" data-i18n="simple">Prosty</button>
+          <button data-mode="pro">Pro</button>
+        </div>
+        <div class="seg" id="langSeg" data-i18n-title="langTip">
+          <button data-lang="pl">PL</button>
+          <button data-lang="en">EN</button>
+        </div>
+        <button class="btn icon theme-toggle" id="themeBtn" data-i18n-title="themeTip">
+          <svg class="ic-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.2M12 19.8V22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2 12h2.2M19.8 12H22M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/></svg>
+          <svg class="ic-moon" viewBox="0 0 24 24"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg>
+        </button>
+        <button class="btn icon" data-action="help" data-i18n-title="helpTip"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.2a2.6 2.6 0 0 1 5 .8c0 1.8-2.5 2.2-2.5 4"/><circle cx="12" cy="17.2" r=".6" fill="currentColor"/></svg></button>
+      </div>
+    </header>
+
+    <!-- ================= WORKSPACE ================= -->
+    <main class="workspace">
+      <aside class="panel left-panel">
+        <div class="tools" id="tools"></div>
+
+        <div class="section">
+          <div class="color-block">
+            <canvas id="colorWheel" width="180" height="180"></canvas>
+            <div class="color-row">
+              <input type="range" id="valueSlider" min="0" max="1" step="0.001" value="1" class="value-slider" data-i18n-title="brightness" />
+              <div class="swatch" id="swatch"></div>
+              <input id="hexInput" class="hex" maxlength="7" spellcheck="false" />
+            </div>
+            <div class="swatches" id="swatches"></div>
+          </div>
+        </div>
+
+        <div class="section sliders">
+          <div class="slider-row"><label data-i18n="size">Rozmiar</label><input type="range" id="sizeSlider" min="4" max="400" step="1" /><output id="sizeOut"></output></div>
+          <div class="slider-row"><label data-i18n="strength">Siła</label><input type="range" id="strengthSlider" min="0.01" max="1" step="0.01" /><output id="strengthOut"></output></div>
+          <div class="slider-row"><label data-i18n="depth">Głębokość</label><input type="range" id="depthSlider" min="0" max="1" step="0.01" /><output id="depthOut"></output></div>
+        </div>
+
+        <!-- Pro-only advanced brush settings -->
+        <div class="pro-only adv">
+          <details open>
+            <summary data-i18n="channels">Kanały pędzla (Multi-Channel)</summary>
+            <div class="chan-grid" id="chanGrid"></div>
+            <div class="slider-row"><label data-i18n="roughness">Chropowatość</label><input type="range" id="roughSlider" min="0" max="1" step="0.01" /><output id="roughOut"></output></div>
+            <div class="slider-row"><label data-i18n="metallic">Metaliczność</label><input type="range" id="metalSlider" min="0" max="1" step="0.01" /><output id="metalOut"></output></div>
+          </details>
+          <details open>
+            <summary data-i18n="alphaLibrary">Biblioteka Alpha</summary>
+            <div class="alpha-grid" id="alphaGrid"></div>
+          </details>
+          <details>
+            <summary data-i18n="brushSettings">Ustawienia pędzla</summary>
+            <div class="field"><label data-i18n="projection">Projekcja</label><select id="projSelect" class="select"></select></div>
+            <div class="slider-row"><label data-i18n="hardness">Twardość</label><input type="range" id="hardSlider" min="0" max="0.95" step="0.01" /><output id="hardOut"></output></div>
+            <div class="slider-row"><label data-i18n="spacing">Odstęp</label><input type="range" id="spacingSlider" min="0.03" max="1" step="0.01" /><output id="spacingOut"></output></div>
+            <div class="slider-row"><label data-i18n="lazyMouse">Lazy Mouse</label><input type="range" id="lazySlider" min="0" max="120" step="1" /><output id="lazyOut"></output></div>
+            <div class="field"><label data-i18n="heightAware">Świadomość wysokości</label><select id="haSelect" class="select"></select></div>
+            <div class="slider-row"><label data-i18n="radial">Symetria radialna</label><input type="range" id="radialSlider" min="1" max="32" step="1" /><output id="radialOut"></output></div>
+          </details>
+          <details>
+            <summary data-i18n="tablet">Tablet / nacisk pióra</summary>
+            <label class="check"><input type="checkbox" id="pSize" /> <span data-i18n="pressureSize">Nacisk → rozmiar</span></label>
+            <label class="check"><input type="checkbox" id="pStrength" /> <span data-i18n="pressureStrength">Nacisk → siła</span></label>
+            <canvas id="curveCanvas" width="220" height="90" class="curve"></canvas>
+            <div class="slider-row"><label data-i18n="pressureCurve">Krzywa nacisku</label><input type="range" id="gammaSlider" min="0.3" max="3" step="0.05" /><output id="gammaOut"></output></div>
+          </details>
+        </div>
+      </aside>
+
+      <section class="viewport" id="viewport">
+        <canvas id="gl"></canvas>
+        <div class="vp-badge" id="vpBadge"></div>
+        <div class="vp-hint" id="vpHint" data-i18n="vpHint">LPM na modelu — maluj · LPM na tle — obracaj · Kółko — przybliż · PPM/Spacja — menu kołowe</div>
+        <div class="radial" id="radial" hidden></div>
+        <div class="progress" id="progress" hidden>
+          <div class="progress-box"><div class="progress-label" id="progressLabel"></div><div class="bar"><i id="progressBar"></i></div></div>
+        </div>
+        <div class="drop-hint" id="dropHint" hidden><span data-i18n="dropHere">Upuść model 3D (.obj, .fbx, .gltf, .glb)</span></div>
+      </section>
+
+      <aside class="panel right-panel pro-only">
+        <div class="panel-head">
+          <span data-i18n="layers">Warstwy</span>
+          <div class="add-layer">
+            <button class="btn small" data-add="paint" data-i18n-title="addPaint">+ <span data-i18n="lPaint">Malarska</span></button>
+            <button class="btn small" data-add="fill" data-i18n-title="addFill">+ <span data-i18n="lFill">Wypełnienie</span></button>
+            <button class="btn small" data-add="procedural" data-i18n-title="addProc">+ <span data-i18n="lProc">Proceduralna</span></button>
+            <button class="btn small" data-add="adjust" data-i18n-title="addAdjust">+ <span data-i18n="lAdjust">Korekta</span></button>
+          </div>
+        </div>
+        <ul class="layer-list" id="layerList"></ul>
+        <div class="inspector" id="inspector"></div>
+        <details class="section project-settings">
+          <summary data-i18n="materialBase">Materiał bazowy i viewport</summary>
+          <div class="field"><label data-i18n="baseColor">Kolor bazowy</label><input type="color" id="baseColor" /></div>
+          <div class="slider-row"><label data-i18n="roughness">Chropowatość</label><input type="range" id="baseRough" min="0" max="1" step="0.01" /><output></output></div>
+          <div class="slider-row"><label data-i18n="metallic">Metaliczność</label><input type="range" id="baseMetal" min="0" max="1" step="0.01" /><output></output></div>
+          <div class="slider-row"><label data-i18n="normalStrength">Siła normal map</label><input type="range" id="normalStrength" min="0.1" max="4" step="0.05" /><output></output></div>
+          <label class="check"><input type="checkbox" id="trueDisp" /> <span data-i18n="trueDisplacement">True Displacement (teselacja)</span></label>
+          <div class="slider-row"><label data-i18n="dispScale">Skala przemieszczenia</label><input type="range" id="dispScale" min="0" max="0.2" step="0.005" /><output></output></div>
+          <div class="slider-row"><label data-i18n="envRotation">Obrót oświetlenia</label><input type="range" id="envRot" min="0" max="360" step="1" /><output></output></div>
+          <div class="slider-row"><label data-i18n="exposure">Ekspozycja</label><input type="range" id="exposure" min="0.2" max="2.5" step="0.01" /><output></output></div>
+        </details>
+      </aside>
+    </main>
+
+    <!-- ================= BOTTOM: NODE GRAPH (Pro) ================= -->
+    <section class="bottom-panel pro-only">
+      <div class="panel-head"><span data-i18n="nodeGraph">Graf węzłów (Node Graph)</span><span class="muted" data-i18n="nodeGraphHint">Przepływ stosu warstw → kanały PBR → wyjście</span></div>
+      <div class="graph" id="graph"></div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer">
+      <span class="muted" id="footerInfo"></span>
+      <span class="copyright">© 2026 CappySoft.pl</span>
+      <span class="muted" id="footerMem"></span>
+    </footer>
+  </div>
+
+  <!-- Export dialog -->
+  <dialog id="exportDialog" class="dialog">
+    <form method="dialog">
+      <h2 data-i18n="exportTitle">Eksport tekstur (Channel Packing)</h2>
+      <div class="preset-list" id="presetList"></div>
+      <div class="dialog-actions">
+        <button value="cancel" class="btn" data-i18n="cancel">Anuluj</button>
+        <button value="ok" class="btn primary" id="exportGo" data-i18n="exportZip">Eksportuj ZIP</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Help dialog -->
+  <dialog id="helpDialog" class="dialog">
+    <form method="dialog">
+      <h2 data-i18n="shortcuts">Skróty klawiszowe</h2>
+      <table class="keys" id="keysTable"></table>
+      <p class="muted small" data-i18n="aboutText"></p>
+      <div class="dialog-actions"><button class="btn primary" data-i18n="close">Zamknij</button></div>
+    </form>
+  </dialog>
+
+  <input type="file" id="modelFile" accept=".obj,.fbx,.gltf,.glb" hidden />
+  <input type="file" id="txsFile" accept=".txs" hidden />
+  <div class="toasts" id="toasts"></div>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

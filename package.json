@@ -1,0 +1,23 @@
+{
+  "name": "cappysculptpaint3d",
+  "version": "1.0.0",
+  "description": "CappySculptPaint3D - real-time 3D PBR texture painting and micro-displacement sculpting (web)",
+  "private": true,
+  "type": "module",
+  "author": "CappySoft.pl",
+  "license": "UNLICENSED",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:single": "vite build --config vite.single.config.js",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "three": "^0.170.0",
+    "three-mesh-bvh": "^0.8.3"
+  },
+  "devDependencies": {
+    "vite": "^6.4.6",
+    "vite-plugin-singlefile": "^2.3.4"
+  }
+}

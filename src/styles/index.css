@@ -1,0 +1,10 @@
+/* Entry stylesheet - imported once from src/main.js. Vite bundles the @imports. */
+@import './theme.css';
+@import './base.css';
+@import './topbar.css';
+@import './left-panel.css';
+@import './viewport.css';
+@import './layers.css';
+@import './node-graph.css';
+@import './footer.css';
+@import './dialogs.css';

@@ -1,0 +1,14 @@
+/* ---------- bottom node graph ---------- */
+.bottom-panel { height: 150px; background: var(--panel); border-top: 1px solid var(--border); flex-direction: column; min-height: 0; }
+.bottom-panel .panel-head { padding: 6px 12px 2px; }
+.muted { color: var(--muted); font-weight: 400; }
+.small { font-size: 11.5px; }
+.graph { flex: 1; overflow-x: auto; overflow-y: hidden; position: relative; padding: 6px 12px 10px; display: flex; align-items: center; gap: 26px; }
+.node { flex: none; min-width: 120px; border-radius: 10px; border: 1px solid var(--border); background: var(--panel-2); font-size: 11.5px; position: relative; cursor: pointer; }
+.node.sel { border-color: var(--accent); }
+.node.off { opacity: .45; }
+.node .nh { padding: 4px 9px; border-bottom: 1px solid var(--border); font-weight: 600; border-radius: 10px 10px 0 0; display: flex; gap: 6px; align-items: center; }
+.node .nb { padding: 4px 9px 6px; color: var(--muted); font-size: 10.5px; }
+.node .dot { width: 8px; height: 8px; border-radius: 50%; }
+.node:not(:last-child)::after { content: ""; position: absolute; right: -27px; top: 50%; width: 26px; height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+.node.output .nh { background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 35%, transparent), color-mix(in srgb, var(--accent-2) 35%, transparent)); }

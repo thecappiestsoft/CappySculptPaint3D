@@ -1,0 +1,18 @@
+/* ---------- layers ---------- */
+.panel-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 10px 6px; font-weight: 600; flex-wrap: wrap; }
+.add-layer { display: flex; flex-wrap: wrap; gap: 4px; }
+.layer-list { list-style: none; margin: 0; padding: 4px 8px; display: flex; flex-direction: column-reverse; gap: 4px; }
+.layer { display: flex; align-items: center; gap: 6px; padding: 6px 7px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--panel-2); cursor: pointer; }
+.layer.sel { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, var(--panel-2)); }
+.layer .eye { border: 0; background: none; cursor: pointer; padding: 0; color: var(--muted); display: flex; }
+.layer .eye.off { opacity: .35; }
+.layer .lname { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.layer .ltype { font-size: 10px; color: var(--muted); padding: 1px 6px; border-radius: 10px; border: 1px solid var(--border); }
+.layer .lbtn { border: 0; background: none; cursor: pointer; color: var(--muted); padding: 1px; display: flex; }
+.layer .lbtn:hover { color: var(--text); }
+.layer .lbtn svg { width: 15px; height: 15px; }
+.inspector { padding: 6px 10px 8px; border-top: 1px solid var(--border); margin-top: 6px; }
+.inspector h4 { margin: 4px 0 6px; font-size: 12px; }
+.inspector .name-input { width: 100%; height: 26px; border-radius: 6px; border: 1px solid var(--border); background: var(--panel-2); padding: 0 7px; margin-bottom: 4px; }
+.project-settings { padding: 8px 10px; margin-top: auto; }
+.color-pair { display: flex; gap: 6px; }
